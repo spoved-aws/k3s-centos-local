@@ -29,3 +29,14 @@ After running this installation:
 	echo 'export KUBECONFIG=/etc/rancher/k3s/k3s.yaml' >> ~/.bashrc
 	source ~/.bashrc
 	```
+### Join the worker nodes to master for the multi node cluster
+Spin 2 more vms ( 1 master & 2 worker nodes ) and change the hostname of the worker nodes. The names must be exclusive otherwise they won't get added to the cluster. 
+```
+curl -sfL https://get.k3s.io | K3S_URL=https://myserver:6443enter code here K3S_TOKEN=mynodetoken sh -
+```
+Setting the `K3S_URL` parameter causes the installer to configure K3s as an agent, instead of a server. The K3s agent will register with the K3s server listening at the supplied URL. The value to use for `K3S_TOKEN` is stored at `/var/lib/rancher/k3s/server/node-token` on your server node.
+
+#### Good to know
+- IP of master node:  `kubectl get nodes -o wide` on master
+- No need to install anything on the worker nodes as k3s script takes care of the installations. 
+- It can take up to 25 minutes for the worker node to join the master. 
